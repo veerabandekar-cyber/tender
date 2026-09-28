@@ -26,13 +26,17 @@ import {
 
 // API Base URL Detection
 const getApiBaseUrl = () => {
-  const { hostname, port } = window.location;
-  const isLocal = hostname === "localhost" || hostname === "127.0.0.1";
-  if (isLocal) {
-    if (port === "8000") return "";
-    return "http://127.0.0.1:8000";
+  if (typeof window !== "undefined") {
+    const port = window.location.port;
+    if (port === "5173" || port === "3000") {
+      return "http://127.0.0.1:8000";
+    }
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1") {
+      return "";
+    }
   }
-  return import.meta.env.VITE_API_URL || "https://asttc-sales.meetlive.in";
+  return import.meta.env.VITE_API_URL || "";
 };
 
 const API_BASE_URL = getApiBaseUrl();
@@ -121,19 +125,23 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Check if user is authenticated on mount
   useEffect(() => {
     const initAuth = async () => {
+      let authenticated = false;
       if (checkAuth()) {
-        const storedUser = getStoredUser();
-        if (storedUser) {
-          setUser(storedUser);
-        } else {
-          // Token exists but no user - fetch from API
-          try {
-            await refreshUser();
-          } catch {
-            // Token invalid, clear it
-            removeToken();
-            removeStoredUser();
-          }
+        try {
+          await refreshUser();
+          authenticated = true;
+        } catch {
+          removeToken();
+          removeStoredUser();
+        }
+      }
+
+      if (!authenticated) {
+        // Auto-login demo account for zero-setup local demo / standalone EXE
+        try {
+          await login("admin@analyticasofttech.com", "demo123");
+        } catch {
+          // ignore error
         }
       }
       setIsLoading(false);
