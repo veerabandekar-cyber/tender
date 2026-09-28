@@ -7,12 +7,21 @@ backend = ROOT / "backend"
 frontend_dist = ROOT / "frontend" / "dist"
 data_dir = ROOT / "data"
 
-hiddenimports = collect_submodules("app") + [
-    "aiosqlite",
-    "aiosqlite.core",
-    "aiosqlite.cursor",
-    "aiosqlite.connection",
-]
+hiddenimports = (
+    collect_submodules("app")
+    + collect_submodules("uvicorn")
+    + collect_submodules("starlette")
+    + collect_submodules("fastapi")
+    + collect_submodules("pydantic")
+    + collect_submodules("pydantic_settings")
+    + collect_submodules("openpyxl")
+    + [
+        "aiosqlite",
+        "email_validator",
+        "bcrypt",
+        "sqlite3",
+    ]
+)
 
 datas = [
     (str(frontend_dist), "frontend_dist"),

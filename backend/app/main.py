@@ -200,12 +200,23 @@ if frontend_dist.exists() and (frontend_dist / "index.html").exists():
         return FileResponse(str(frontend_dist / "index.html"))
 
 
-# For running with: python -m app.main
+# For running standalone / EXE: python -m app.main
 if __name__ == "__main__":
+    import threading
+    import webbrowser
+    import time
     import uvicorn
+
+    def _open_browser():
+        time.sleep(1.2)
+        webbrowser.open("http://127.0.0.1:8000")
+
+    threading.Thread(target=_open_browser, daemon=True).start()
+
     uvicorn.run(
-        "app.main:app",
-        host="0.0.0.0",
+        app,
+        host="127.0.0.1",
         port=8000,
         reload=False,
     )
+
