@@ -205,18 +205,41 @@ if __name__ == "__main__":
     import threading
     import webbrowser
     import time
+    import socket
+    import sys
     import uvicorn
+
+    def _find_available_port(start_port: int = 8000, max_tries: int = 20) -> int:
+        for p in range(start_port, start_port + max_tries):
+            with socket.socket(socket.AF_INET, socket.SOCK_STREAM) as s:
+                try:
+                    s.bind(("127.0.0.1", p))
+                    return p
+                except OSError:
+                    continue
+        return start_port
+
+    target_port = _find_available_port(8000)
 
     def _open_browser():
         time.sleep(1.2)
-        webbrowser.open("http://127.0.0.1:8000")
+        url = f"http://127.0.0.1:{target_port}"
+        print(f"\n[INFO] Opening Tender Intelligence Portal at: {url}\n")
+        webbrowser.open(url)
 
     threading.Thread(target=_open_browser, daemon=True).start()
 
-    uvicorn.run(
-        app,
-        host="127.0.0.1",
-        port=8000,
-        reload=False,
-    )
+    try:
+        uvicorn.run(
+            app,
+            host="127.0.0.1",
+            port=target_port,
+            reload=False,
+            log_level="info",
+        )
+    except Exception as exc:
+        print(f"\n[ERROR] Server stopped with error: {exc}")
+        if getattr(sys, "frozen", False):
+            input("\nPress Enter to exit...")
+
 

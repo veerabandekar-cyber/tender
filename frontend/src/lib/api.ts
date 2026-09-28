@@ -10,18 +10,17 @@ import {
 import { getAuthHeaders, getStoredUser } from "./auth";
 
 const getBaseUrl = () => {
-  const host = window.location.hostname;
-  const isLocal = host === "localhost" || host === "127.0.0.1";
-
-  if (isLocal) {
-    if (window.location.port === "8000") {
+  if (typeof window !== "undefined") {
+    const port = window.location.port;
+    if (port === "5173" || port === "3000") {
+      return "http://127.0.0.1:8000";
+    }
+    const host = window.location.hostname;
+    if (host === "localhost" || host === "127.0.0.1") {
       return "";
     }
-
-    return "http://127.0.0.1:8000";
   }
-
-  return import.meta.env.VITE_API_URL || "https://asttc-sales.meetlive.in";
+  return import.meta.env.VITE_API_URL || "";
 };
 
 const BASE_URL = getBaseUrl();
