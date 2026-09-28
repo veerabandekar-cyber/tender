@@ -1,0 +1,29 @@
+services:
+  # 1. Backend (FastAPI)
+  - type: web
+    name: asttc-catalogue-api
+    env: python
+    region: singapore # Choose a region close to you
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
+    envVars:
+      - key: DATABASE_URL
+        sync: false # You will provide this in the Render Dashboard
+      - key: PORT
+        value: 8000
+    rootDir: backend
+
+  # 2. Frontend (React/Vite)
+  - type: web
+    name: asttc-product-catalogue
+    runtime: static
+    region: singapore
+    buildCommand: npm install && npm run build
+    staticPublishPath: ./dist
+    rootDir: frontend
+    envVars:
+      - key: VITE_API_URL
+        fromService:
+          name: asttc-catalogue-api
+          type: web
+          property: host

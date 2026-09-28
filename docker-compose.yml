@@ -1,0 +1,69 @@
+version: '3.8'
+
+services:
+  # PostgreSQL Database
+  database:
+    image: postgres:16-alpine
+    container_name: analytica-db
+    environment:
+      POSTGRES_USER: ${DB_USER:-postgres}
+      POSTGRES_PASSWORD: ${DB_PASSWORD:-postgres}
+      POSTGRES_DB: ${DB_NAME:-catalogue_db}
+    ports:
+      - "5431:5432"
+    volumes:
+      - postgres_data_v3:/var/lib/postgresql/data
+      # - ./backend/init.sql:/docker-entrypoint-initdb.d/init.sql
+      - ./backend/schema.sql:/docker-entrypoint-initdb.d/init.sql
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${DB_USER:-postgres}"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    networks:
+      - analytica-network
+
+  # Backend API
+  backend:
+    build:
+      context: ./backend
+      dockerfile: Dockerfile
+    container_name: analytica-api
+    environment:
+      DATABASE_URL: postgresql://${DB_USER:-postgres}:${DB_PASSWORD:-postgres}@database:5432/${DB_NAME:-catalogue_db}
+      DEBUG: ${DEBUG:-false}
+      PORT: 8001
+    ports:
+      - "8001:8001"
+    depends_on:
+      database:
+        condition: service_healthy
+    volumes:
+      - ./backend:/app
+    networks:
+      - analytica-network
+    command: uvicorn app.main:app --host 0.0.0.0 --port 8001 --reload
+
+  # Frontend
+  frontend:
+    build:
+      context: ./frontend
+      dockerfile: Dockerfile
+    container_name: analytica-frontend
+    ports:
+      - "3002:3002"
+    environment:
+      - PORT=3002
+      - REACT_APP_API_URL=http://backend:8001
+    depends_on:
+      - backend
+    networks:
+      - analytica-network
+
+volumes:
+  postgres_data_v3:
+    driver: local
+
+networks:
+  analytica-network:
+    driver: bridge

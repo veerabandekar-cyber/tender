@@ -1,0 +1,54 @@
+# Version Control Ignored Files
+
+# Python cache & build files
+__pycache__/
+*.pyc
+*.pyo
+*.pyd
+.pytest_cache/
+venv/
+env/
+
+# Database files
+backend/catalogue_db.db
+*.db
+*.sqlite
+
+# Environment configurations
+.env
+*.env
+.env.local
+.env.*.local
+.env.*
+!.env.example
+frontend/.env
+backend/.env
+
+# Local environments, generated builds, and databases
+backend/.venv/
+build/
+dist/
+data/*.db
+
+# Node.js
+node_modules/
+dist/
+dist-ssr/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+
+# Editor & System
+.vscode/
+.idea/
+.DS_Store
+*.suo
+*.ntvs*
+*.njsproj
+*.sln
+*.sw?
+
+# Generated files
+backend/static/
+static/

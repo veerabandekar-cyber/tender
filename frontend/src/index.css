@@ -1,0 +1,183 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@font-face {
+  font-family: "Ethnocentric";
+  src: url("/fonts/ethnocentric.ttf") format("truetype");
+  font-weight: normal;
+  font-style: normal;
+}
+
+@font-face {
+  font-family: "Ethnocentric";
+  src: url("/fonts/ethnocentric-italic.ttf") format("truetype");
+  font-weight: normal;
+  font-style: italic;
+}
+
+/* Sales Enablement Platform Design System
+   Enterprise B2B theme with blue/teal accents
+   All colors in HSL format */
+
+@layer base {
+  :root {
+    /* Core backgrounds */
+    --background: 210 20% 98%;
+    --foreground: 215 25% 15%;
+
+    /* Card surfaces */
+    --card: 0 0% 100%;
+    --card-foreground: 215 25% 15%;
+
+    /* Popover surfaces */
+    --popover: 0 0% 100%;
+    --popover-foreground: 215 25% 15%;
+
+    /* Primary - Deep Teal Blue */
+    --primary: 199 89% 32%;
+    --primary-foreground: 0 0% 100%;
+
+    /* Secondary - Light Blue Gray */
+    --secondary: 210 25% 95%;
+    --secondary-foreground: 215 25% 25%;
+
+    /* Muted elements */
+    --muted: 210 20% 96%;
+    --muted-foreground: 215 15% 50%;
+
+    /* Accent - Teal */
+    --accent: 175 65% 40%;
+    --accent-foreground: 0 0% 100%;
+
+    /* Status colors */
+    --destructive: 0 72% 51%;
+    --destructive-foreground: 0 0% 100%;
+    --success: 152 69% 40%;
+    --success-foreground: 0 0% 100%;
+    --warning: 38 92% 50%;
+    --warning-foreground: 0 0% 100%;
+
+    /* Borders & inputs */
+    --border: 214 20% 88%;
+    --input: 214 20% 88%;
+    --ring: 199 89% 32%;
+
+    /* Radius */
+    --radius: 0.5rem;
+
+    /* Sidebar - Darker professional look */
+    --sidebar-background: 215 28% 17%;
+    --sidebar-foreground: 210 20% 90%;
+    --sidebar-primary: 199 89% 48%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 25% 25%;
+    --sidebar-accent-foreground: 210 20% 95%;
+    --sidebar-border: 215 20% 25%;
+    --sidebar-ring: 199 89% 48%;
+    --sidebar-muted: 215 20% 60%;
+
+    /* Custom tokens for dashboard */
+    --dashboard-header: 0 0% 100%;
+    --table-header: 210 20% 97%;
+    --table-row-hover: 199 30% 97%;
+    --badge-mandatory: 199 89% 32%;
+    --badge-recommended: 175 65% 40%;
+  }
+
+  .dark {
+    --background: 215 28% 10%;
+    --foreground: 210 20% 95%;
+    --card: 215 25% 14%;
+    --card-foreground: 210 20% 95%;
+    --popover: 215 25% 14%;
+    --popover-foreground: 210 20% 95%;
+    --primary: 199 89% 48%;
+    --primary-foreground: 0 0% 100%;
+    --secondary: 215 25% 20%;
+    --secondary-foreground: 210 20% 90%;
+    --muted: 215 20% 18%;
+    --muted-foreground: 215 15% 60%;
+    --accent: 175 65% 45%;
+    --accent-foreground: 0 0% 100%;
+    --destructive: 0 62% 45%;
+    --destructive-foreground: 0 0% 100%;
+    --border: 215 20% 22%;
+    --input: 215 20% 22%;
+    --ring: 199 89% 48%;
+    --sidebar-background: 215 30% 12%;
+    --sidebar-foreground: 210 20% 85%;
+    --sidebar-primary: 199 89% 52%;
+    --sidebar-primary-foreground: 0 0% 100%;
+    --sidebar-accent: 215 25% 18%;
+    --sidebar-accent-foreground: 210 20% 90%;
+    --sidebar-border: 215 20% 18%;
+    --sidebar-ring: 199 89% 52%;
+  }
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground antialiased;
+    font-family:
+      "Inter",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif;
+  }
+}
+
+@layer components {
+  .dashboard-card {
+    @apply bg-card rounded-lg border border-border shadow-sm transition-all duration-200;
+  }
+
+  .dashboard-card-hover {
+    @apply dashboard-card hover:shadow-md hover:border-primary/30 cursor-pointer;
+  }
+
+  .table-enterprise {
+    @apply w-full text-sm;
+  }
+
+  .table-enterprise thead {
+    @apply bg-[hsl(var(--table-header))];
+  }
+
+  .table-enterprise th {
+    @apply px-2.5 sm:px-4 py-2.5 sm:py-3 text-left font-semibold text-foreground/80 border-b border-border whitespace-nowrap;
+  }
+
+  .table-enterprise td {
+    @apply px-2.5 sm:px-4 py-2.5 sm:py-3 border-b border-border;
+  }
+
+  .table-enterprise tbody tr {
+    @apply transition-colors hover:bg-[hsl(var(--table-row-hover))] cursor-pointer;
+  }
+
+  .badge-mandatory {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-primary text-primary-foreground;
+  }
+
+  .badge-recommended {
+    @apply inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-accent text-accent-foreground;
+  }
+
+  .section-title {
+    @apply text-lg font-semibold text-foreground mb-4;
+  }
+
+  .page-title {
+    @apply text-2xl font-bold text-foreground;
+  }
+
+  .breadcrumb-link {
+    @apply text-muted-foreground hover:text-primary transition-colors;
+  }
+}
