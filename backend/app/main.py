@@ -232,9 +232,9 @@ if __name__ == "__main__":
     target_port = _find_available_port(8000)
 
     def _open_browser():
-        time.sleep(1.2)
+        time.sleep(2.0)
         url = f"http://127.0.0.1:{target_port}"
-        print(f"\n[INFO] Opening Tender Intelligence Portal at: {url}\n")
+        print(f"\n[INFO] Opening Tender Intelligence Portal at: {url}\n", flush=True)
         webbrowser.open(url)
 
     threading.Thread(target=_open_browser, daemon=True).start()
