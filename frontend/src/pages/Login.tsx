@@ -523,6 +523,20 @@ export default function Login() {
                 )}
               </Button>
 
+              <div className="pt-1">
+                <button
+                  type="button"
+                  onClick={() => {
+                    setEmail("admin@analyticasofttech.com");
+                    setPassword("demo123");
+                  }}
+                  className="w-full py-2.5 px-3 text-xs font-medium text-primary bg-primary/10 hover:bg-primary/20 rounded-lg border border-primary/20 transition-colors flex items-center justify-center gap-2"
+                >
+                  <User className="w-4 h-4" />
+                  Quick Fill Demo Account (admin@analyticasofttech.com)
+                </button>
+              </div>
+
               <div className="text-center text-sm text-muted-foreground">
                 Don't have an account?{" "}
                 <button

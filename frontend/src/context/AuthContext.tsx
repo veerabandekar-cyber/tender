@@ -125,30 +125,24 @@ export function AuthProvider({ children }: AuthProviderProps) {
   // Check if user is authenticated on mount
   useEffect(() => {
     const initAuth = async () => {
-      let authenticated = false;
       if (checkAuth()) {
         try {
           await refreshUser();
-          authenticated = true;
         } catch {
           removeToken();
           removeStoredUser();
+          setUser(null);
         }
-      }
-
-      if (!authenticated) {
-        // Auto-login demo account for zero-setup local demo / standalone EXE
-        try {
-          await login("admin@analyticasofttech.com", "demo123");
-        } catch {
-          // ignore error
-        }
+      } else {
+        removeToken();
+        removeStoredUser();
+        setUser(null);
       }
       setIsLoading(false);
     };
 
     initAuth();
-  }, []);
+  }, [refreshUser]);
 
   // Get security questions list
   const getSecurityQuestions = useCallback(async (): Promise<string[]> => {

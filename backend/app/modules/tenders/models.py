@@ -35,10 +35,10 @@ class Tender(Base):
         String(500), nullable=True
     )
     instrument_category: Mapped[str | None] = mapped_column(
-        String(255), nullable=True
+        String(255), nullable=True, index=True
     )
     portal: Mapped[str | None] = mapped_column(
-        String(100), nullable=True
+        String(100), nullable=True, index=True
     )
     tender_value: Mapped[float | None] = mapped_column(
         Numeric(15, 2), nullable=True
@@ -47,7 +47,7 @@ class Tender(Base):
         DateTime(timezone=True), nullable=True
     )
     bid_closing_date: Mapped[datetime | None] = mapped_column(
-        DateTime(timezone=True), nullable=True
+        DateTime(timezone=True), nullable=True, index=True
     )
     contact_person: Mapped[str | None] = mapped_column(
         String(255), nullable=True
@@ -68,7 +68,7 @@ class Tender(Base):
         JSON, nullable=False, default=list
     )
     status: Mapped[TenderStatus] = mapped_column(
-        SAEnum(TenderStatus), nullable=False, default=TenderStatus.NEW
+        SAEnum(TenderStatus), nullable=False, default=TenderStatus.NEW, index=True
     )
     action_required: Mapped[str | None] = mapped_column(
         Text, nullable=True
@@ -83,10 +83,10 @@ class Tender(Base):
         JSON, nullable=True
     )
     is_active: Mapped[bool] = mapped_column(
-        nullable=False, default=True
+        nullable=False, default=True, index=True
     )
     created_at: Mapped[datetime] = mapped_column(
-        DateTime(timezone=True), server_default=func.now(), nullable=False
+        DateTime(timezone=True), server_default=func.now(), nullable=False, index=True
     )
     updated_at: Mapped[datetime] = mapped_column(
         DateTime(timezone=True), server_default=func.now(), onupdate=func.now(), nullable=False

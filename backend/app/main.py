@@ -178,6 +178,16 @@ app.include_router(discovery_router, prefix="/api/v1")
 app.include_router(reports_router, prefix="/api/v1")
 
 
+@app.exception_handler(Exception)
+async def global_exception_handler(request, exc: Exception):
+    logger.error("Unhandled exception at %s %s: %s", request.method, request.url.path, exc, exc_info=True)
+    from fastapi.responses import JSONResponse
+    return JSONResponse(
+        status_code=500,
+        content={"detail": "An internal server error occurred. Please retry your request."},
+    )
+
+
 # Health check
 @app.get("/health", tags=["Health"])
 async def health_check():
