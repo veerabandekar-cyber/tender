@@ -122,6 +122,26 @@ export function AuthProvider({ children }: AuthProviderProps) {
   const [user, setUser] = useState<StoredUser | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
+  // Refresh user data from API
+  const refreshUser = useCallback(async () => {
+    try {
+      const response = await fetch(`${API_BASE_URL}${API_PREFIX}/auth/me`, {
+        headers: getAuthHeaders(),
+      });
+
+      if (!response.ok) {
+        throw new Error("Failed to fetch user");
+      }
+
+      const userData: StoredUser = await response.json();
+      setStoredUser(userData);
+      setUser(userData);
+    } catch (error) {
+      console.error("Unable to refresh authenticated user:", error);
+      throw error;
+    }
+  }, []);
+
   // Check if user is authenticated on mount
   useEffect(() => {
     const initAuth = async () => {
@@ -432,26 +452,6 @@ export function AuthProvider({ children }: AuthProviderProps) {
     },
     [],
   );
-
-  // Refresh user data from API
-  const refreshUser = useCallback(async () => {
-    try {
-      const response = await fetch(`${API_BASE_URL}${API_PREFIX}/auth/me`, {
-        headers: getAuthHeaders(),
-      });
-
-      if (!response.ok) {
-        throw new Error("Failed to fetch user");
-      }
-
-      const userData: StoredUser = await response.json();
-      setStoredUser(userData);
-      setUser(userData);
-    } catch (error) {
-      console.error("Unable to refresh authenticated user:", error);
-      throw error;
-    }
-  }, []);
 
   const value: AuthContextType = {
     user,
